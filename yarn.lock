@@ -3177,10 +3177,8 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.21.0.tgz#83f7479c524ab523ac2df702ade30b9724476c72"
   integrity sha512-lkC8kZYntxVKr7b8xmjCVUgE0a8xgDakPyDo9uSWavXPyYqLgYYGdEd2j8NxihRyb6UwpX3G/hFUF4/9q2V+/g==
 
-"@oraichain/oraiscan-widget@^0.2.16":
+"@oraichain/oraiscan-widget@/Users/oraichain/oraichain_project/foundation/oraiscan-widget":
   version "0.2.16"
-  resolved "https://registry.yarnpkg.com/@oraichain/oraiscan-widget/-/oraiscan-widget-0.2.16.tgz#aaebde8d924b0751cec3f18f2c8a7501c013f78a"
-  integrity sha512-WuN2KljgrI4eWvexEZ4yIaWrgdYtG+rRxpjckSA2dqlNGNblMhbAIY4Vj1UcGfwa0X9JvjQkxxOkFnJfFDEkag==
   dependencies:
     "@cosmjs/amino" "^0.32.0"
     "@cosmjs/cosmwasm-stargate" "^0.32.0"

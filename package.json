@@ -26,7 +26,7 @@
     "@intlify/unplugin-vue-i18n": "^0.8.2",
     "@leapwallet/cosmos-snap-provider": "^0.1.20",
     "@leapwallet/name-matcha": "^1.1.0",
-    "@oraichain/oraiscan-widget": "^0.2.16",
+    "@oraichain/oraiscan-widget": "/Users/oraichain/oraichain_project/foundation/oraiscan-widget",
     "@osmonauts/lcd": "^0.8.0",
     "@ping-pub/chain-registry-client": "^0.0.25",
     "@tharsis/proto": "^0.1.20",

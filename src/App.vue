@@ -2,6 +2,7 @@
 import { themeChange } from 'theme-change';
 import { defineAsyncComponent, onMounted } from 'vue';
 import TxDialog from './components/TxDialog.vue';
+import CreateProposalDialog from './components/CreateProposalDialog.vue';
 
 onMounted(() => {
   themeChange(false);
@@ -23,5 +24,6 @@ onMounted(() => {
   <div>
     <RouterView />
     <TxDialog />
+    <CreateProposalDialog />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useGovStore } from '@/stores';
+import { useProposalDialog, useGovStore } from '@/stores';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import { ref, onMounted, toRaw } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -9,6 +9,7 @@ import { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
 const tab = ref(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD);
 const store = useGovStore();
 const pageRequest = ref(new PageRequest());
+const proposalDialog = useProposalDialog();
 
 onMounted(() => {
   store
@@ -39,6 +40,10 @@ function page(p: number) {
 </script>
 <template>
   <div class="mx-6 section">
+    <label for="CreateProposal" class="btn btn-sm btn-primary rounded-md mb-5" @click="proposalDialog.open('orai')">
+      Create Proposal +
+    </label>
+
     <div class="tabs tabs-boxed bg-transparent mb-4 text-center customTab">
       <a class="tab text-gray-400 uppercase" :class="{
         'tab-active': tab === ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD,
