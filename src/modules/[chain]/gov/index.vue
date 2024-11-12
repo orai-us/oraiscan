@@ -40,7 +40,7 @@ function page(p: number) {
 </script>
 <template>
   <div class="mx-6 section">
-    <label for="CreateProposal" class="btn btn-sm btn-primary rounded-md mb-5" @click="proposalDialog.open('orai')">
+    <label for="CreateProposal" class="btn btn-sm btn-primary rounded-md mb-5" @click="proposalDialog.open('Oraichain','orai')">
       Create Proposal +
     </label>
 

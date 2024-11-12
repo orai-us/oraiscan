@@ -8,6 +8,7 @@ export const useProposalDialog = defineStore('proposalDialog', {
     return {
       sender: '',
       denom: '',
+      chainId: '',
     };
   },
   getters: {
@@ -16,7 +17,8 @@ export const useProposalDialog = defineStore('proposalDialog', {
     },
   },
   actions: {
-    open(denom: string, callback?: Function) {
+    open(chainId: string, denom: string, callback?: Function) {
+      this.chainId = chainId;
       this.sender = this.walletAddress;
       this.denom = denom;
       if (callback) {
