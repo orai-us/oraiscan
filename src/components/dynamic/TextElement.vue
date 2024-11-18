@@ -80,7 +80,6 @@ const isConvertable = computed(() => {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
-  <div v-if="isMD()" v-html="value" ></div>
   <span v-else-if="isAddress()" class="flex">
     <RouterLink :to="`/${chainStore.chainName}/account/${text}`">{{
       text
