@@ -9,11 +9,24 @@ import { fromBase64, toHex } from '@cosmjs/encoding';
 const chainStore = useBlockchain();
 const props = defineProps(['value']);
 const format = useFormatter();
+
+function isHTML(str:string) {
+  var divElement = document.createElement('div');
+  divElement.innerHTML = str;
+
+  for (var c = divElement.childNodes, i = c.length; i--; ) {
+    if (c[i].nodeType == 1) return true; 
+  }
+
+  return false;
+}
+
 function isMD() {
   if (
     props.value &&
     (String(props.value).indexOf('\n') > -1 ||
-      String(props.value).indexOf('\\n') > -1)
+      String(props.value).indexOf('\\n') > -1)||
+      isHTML(props.value)
   ) {
     return true;
   }
@@ -67,6 +80,7 @@ const isConvertable = computed(() => {
     previewOnly
     class="md-editor-recover"
   ></MdEditor>
+  <div v-if="isMD()" v-html="value" ></div>
   <span v-else-if="isAddress()" class="flex">
     <RouterLink :to="`/${chainStore.chainName}/account/${text}`">{{
       text

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useProposalDialog, useGovStore } from '@/stores';
+import { useProposalDialog, useGovStore, useBlockchain } from '@/stores';
 import ProposalListItem from '@/components/ProposalListItem.vue';
 import { ref, onMounted, toRaw } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -10,6 +10,7 @@ const tab = ref(ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD);
 const store = useGovStore();
 const pageRequest = ref(new PageRequest());
 const proposalDialog = useProposalDialog();
+const chainStore = useBlockchain();
 
 onMounted(() => {
   store
@@ -40,7 +41,7 @@ function page(p: number) {
 </script>
 <template>
   <div class="mx-6 section">
-    <label for="CreateProposal" class="btn btn-sm btn-primary rounded-md mb-5" @click="proposalDialog.open('Oraichain','orai')">
+    <label for="CreateProposal" class="btn btn-sm btn-primary rounded-md mb-5">
       Create Proposal +
     </label>
 
