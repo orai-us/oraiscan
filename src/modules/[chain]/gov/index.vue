@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useProposalDialog, useGovStore, useBlockchain } from '@/stores';
 import ProposalListItem from '@/components/ProposalListItem.vue';
-import { ref, onMounted, toRaw } from 'vue';
+import { ref, onMounted, toRaw, watchEffect } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
 import { PageRequest } from '@/types';
 import { ProposalStatus } from 'cosmjs-types/cosmos/gov/v1beta1/gov';
@@ -38,6 +38,13 @@ function page(p: number) {
   pageRequest.value.setPage(p);
   store.fetchProposals(tab.value, pageRequest.value);
 }
+
+watchEffect(() => {
+  if (Array.isArray(store?.proposals[tab.value]?.proposals))
+  for (let item of store?.proposals[tab.value].proposals) {
+    console.log({ item: toRaw(item) })
+  }
+})
 </script>
 <template>
   <div class="mx-6 section">
