@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 
 import type { PageResponse } from 'cosmjs-types/cosmos/base/query/v1beta1/pagination';
 import { useIBCModule } from './connStore';
+import IBCTable from '@/components/ibc/IBCTable.vue';
 
 const ibcStore = useIBCModule();
 const pageResponse = ref({} as PageResponse | undefined);
@@ -34,12 +35,13 @@ onMounted(() => {
       </div>
       <div>
         <div v-show="tab === 'registry'" class="flex flex-wrap gap-4 p-4">
-          <span
+          <!-- <span
             v-for="s in ibcStore.commonIBCs"
             class="btn btn-third-sm"
             @click="ibcStore.fetchConnection(s.path)"
             >{{ s.from }} &#x21cc; {{ s.to }}</span
-          >
+          > -->
+          <IBCTable :commonIBCs="ibcStore.commonIBCs"/>
         </div>
         <div v-show="tab === 'favorite'" class="flex flex-wrap gap-1 p-4">
           <div class="join border border-primary">
