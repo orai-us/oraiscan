@@ -184,3 +184,19 @@ export const getListHolderAssets = async (pagination: any, denom: string, endpoi
     return { denomOwners: [], pagination: { total: 0 } };
   }
 };
+
+const urlSupply = '/v1beta1/supply';
+export const getListSupply = async (params?: any) => {
+  try {
+    const config = {
+      baseURL: baseLcdOraiBank,
+      url: urlSupply,
+      method: METHODS.GET,
+      params,
+    };
+    const res = await api.request(config);
+    return res.data;
+  } catch (error) {
+    console.log({ error });
+  }
+};

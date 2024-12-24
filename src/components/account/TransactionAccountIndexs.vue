@@ -97,5 +97,5 @@ function handlePagination(page: number) {
 
 <template>
   <TransactionTable :transactions="transactions" :chain="chain" :txTotal="totalCount" :pagination="pagination"
-    :handlePagination="handlePagination" />
+    :handlePagination="handlePagination" :displayStatus="true"/>
 </template>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { getInfoToken, getListAssetOnChainAndRegistry, getPriceByIds } from '@/service/assetsService';
+import { getListAssetOnChainAndRegistry, getListSupply, getPriceByIds } from '@/service/assetsService';
 import { LIST_COIN } from '@/constants';
 import { formatNumber, shortenDenom } from '@/utils';
 import Pagination from '@/components/pagination/Pagination.vue';
@@ -23,6 +23,7 @@ const pagination = reactive({
   offset: 0
 });
 const searchQuery = ref("");
+const supplies = ref([] as Array<any>);
 
 // onMounted(async () => {
 //   try {
@@ -58,9 +59,9 @@ onMounted(async () => {
     const assetsSupported = assets.filter(item => item.logo_URIs && item.symbol.length && coingeckoSymbols.includes(item.symbol.toLowerCase()))
       .map(asset => ({ ...asset, id: coingeckoIds[coingeckoSymbols.indexOf(asset.display.toLowerCase())] }));
 
-    const assetsUnSupported = assets.filter(item => !(item.logo_URIs && item.symbol && coingeckoSymbols.includes(item.symbol.toLowerCase())));
+    const assetsUnSupported = assets.filter(item => !(item.logo_URIs && coingeckoSymbols.includes(item.symbol.toLowerCase())) && item.symbol);
     assetsAll.value = [...assetsSupported, ...assetsUnSupported];
-    assetsSearch.value = [...assetsSupported, ...assetsUnSupported].filter(item => item.symbol);
+    assetsSearch.value = [...assetsSupported, ...assetsUnSupported];
     
     const ids = assetsSupported.map((item: any) => item?.id);
 
@@ -76,6 +77,15 @@ onMounted(async () => {
     console.log({ error });
   }
 });
+
+onMounted(async () => {
+  try {
+    const res = await getListSupply({ 'pagination.limit': 200, 'pagination.offset': 0 });
+    supplies.value = res.supply;
+  } catch (error) {
+    console.log({ error });
+  }
+})
 
 const totalAssets = computed(() => { return assetsSearch.value.length; });
 
@@ -94,13 +104,17 @@ watch(searchQuery,()=>{
   assetsSearch.value = assetsAll.value.filter((item) => item.symbol?.toLowerCase().includes(keyword) || item.base?.toLowerCase().includes(keyword));
 })
 
+function findSupplyByDenom(denom: string) {
+  return supplies.value.find(item => item.denom == denom)?.amount / Math.pow(10, 6);
+}
+
 </script>
 <template>
   <div class="m-4 md:m-6 border border-base-400 bg-base-100 rounded-2xl p-5 flex gap-2 flex-col">
     <div class="text-white font-bold text-lg">Assets Dashboard</div>
     <div class="w-full h-[1px] bg-base-300"></div>
     <div class="flex flex-row justify-between items-center mt-2 mb-2">
-      <span class="text-white font-bold">There are <span class="text-[#CBAEFF]">{{ totalAssets }}</span> Assets</span>
+      <span class="text-white font-bold">There are <span class="text-[#CBAEFF]">{{ formatNumber(totalAssets) }}</span> Assets</span>
       <input
         class="input w-[300px] !input-bordered bg-base text-[14px] font-normal h-[44px] focus:outline-none text-white"
         v-model="searchQuery" placeholder="Search by Name, Denom" />
@@ -113,12 +127,12 @@ watch(searchQuery,()=>{
           <th class="text-white font-bold text-sm text-right"></th>
           <th class="text-white font-bold text-sm text-right">Denom</th>
           <th class="text-white font-bold text-sm text-right">Price</th>
-          <!-- <th class="text-white font-bold text-sm text-right">Total Supply</th> -->
+          <th class="text-white font-bold text-sm text-right">Total Supply</th>
           <!-- <th class="text-white font-bold text-sm text-right">Circulating Supply</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(v, index) in assets" :key="index" class="cursor-pointer"
+        <tr v-for="(v, index) in assets" :key="v.base" class="cursor-pointer"
           @click="router.push(`/${chain}/assets/${encodeURIComponent(v.base)}`)">
           <td>
             <div class="flex flex-row items-center gap-3">
@@ -144,16 +158,16 @@ watch(searchQuery,()=>{
             </span>
             <span v-else>-</span>
           </td>
-          <!-- <td class="text-right">
-            <div v-if="priceTokens[v.id]?.total_supply" class="text-white">
-              <div>{{ formatNumber(priceTokens[v.id].total_supply) }}</div>
-              <span v-if="priceTokens[v.id]?.current_price" class="text-xs text-gray-400">$ {{
-                formatNumber(priceTokens[v.id].total_supply *
-                priceTokens[v.id].current_price) }}</span>
+          <td class="text-right">
+            <div v-if="findSupplyByDenom(v.base)" class="text-white">
+              <div>{{ formatNumber(findSupplyByDenom(v.base)) }}</div>
+              <span v-if="priceTokens[v.id]?.usd" class="text-xs text-gray-400">$ {{
+                formatNumber(findSupplyByDenom(v.base) *
+                priceTokens[v.id].usd) }}</span>
               <span v-else>-</span>
             </div>
             <span v-else>-</span>
-          </td> -->
+          </td>
           <!-- <td class="text-right">
             <div v-if="priceTokens[v.id]?.circulating_supply" class="text-white">
               <div>{{ formatNumber(priceTokens[v.id].circulating_supply) }}

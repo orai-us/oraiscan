@@ -6,7 +6,7 @@ import { useFormatter } from '@/stores';
 import { CHAIN_INDEXS } from '@/constants';
 import { formatTitle } from '@/libs/utils';
 
-const props = defineProps(['transactions', 'chain', 'txTotal', 'limit', 'handlePagination']);
+const props = defineProps(['transactions', 'chain', 'txTotal', 'limit', 'handlePagination', 'displayStatus']);
 const format = useFormatter();
 const txs = ref([] as Array<any>)
 
@@ -44,7 +44,7 @@ watchEffect(() => {
           <th>Message</th>
           <th>Height</th>
           <th>Fee</th>
-          <th>Status</th>
+          <th v-if="displayStatus">Status</th>
           <th>Time</th>
         </tr>
       </thead>
@@ -78,7 +78,7 @@ watchEffect(() => {
           <td class="py-3 !break-normal">
             <span>{{ v.fee || "-" }}</span>
           </td>
-          <td>
+          <td v-if="displayStatus">
             <button class="btn btn-xs  border rounded-lg " v-if="v.state"
             :class="{'!bg-[rgba(39,120,77,0.20)] !text-[#39DD47] border-[rgba(39,120,77,0.20)]': v.state ==='IN', 
                      '!bg-[rgba(255,82,82,0.20)] !text-[#FF5252] border-[rgba(255,82,82,0.20)]': v.state ==='OUT'}">
