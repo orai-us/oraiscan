@@ -152,7 +152,6 @@ watch([balancesAssets, delegatesAssets, rewardsTotalAssets, unbondingAssets, sup
   const assets = [...balancesAssets.value, ...delegatesAssets.value, ...rewardsTotalAssets.value, ...unbondingAssets.value];
   const ids = assets.map(item => item?.id);
 
-  console.log({ ids })
   const result: any = {};
   if (ids?.length > 0) {
     const res = await getPriceByIds({ ids: ids.join(",") });

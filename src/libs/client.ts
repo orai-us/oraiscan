@@ -733,7 +733,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getAuthAccount(address: string) {
     // return this.request(this.registry.auth_account_address, { address });
     const res = await this.queryClient.auth.account(address);
-    console.log(res);
     return res;
   }
   // Bank Module
@@ -764,7 +763,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getBankSupplyByDenom(denom: string) {
     try {
       const res = await this.queryClient.bank.supplyOf(denom);
-      console.log(res);
       return res;
     } catch (ex) {
       console.log(ex);
@@ -1036,7 +1034,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const res = await this.queryClient.staking.delegatorUnbondingDelegations(
       delegator_addr
     );
-    console.log(res);
     return res;
   }
   async getStakingDelegatorValidators(delegator_addr: string) {
@@ -1052,7 +1049,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getStakingParams() {
     try {
       const res = await this.queryClient.staking.params();
-      console.log(res);
       return res;
     } catch (ex) {
       console.log(ex);
@@ -1063,7 +1059,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     try {
       const res = await this.queryClient.staking.pool();
       // const res = await this.request(this.registry.staking_pool, {});
-      console.log(res);
       return res;
     } catch (error) {
       console.log('error staking pool: ', error);
@@ -1073,7 +1068,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   async getStakingValidators(status: BondStatusString, limit = 200) {
     try {
       const res = await this.queryClient.staking.validators(status);
-      console.log(status, res);
       return res;
     } catch (ex) {
       console.log(ex);
@@ -1231,7 +1225,6 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
   }
   async getBaseBlockLatest() {
     const res = await this.tmClient.block();
-    console.log(res);
     return res;
     // return this.request(this.registry.base_tendermint_block_latest, {});
   }
@@ -1328,37 +1321,44 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //   params,
     //   `${query}&${page.toQueryString()}`
     // );
-    const res = await this.tmClient.txSearch({
-      query: buildQuery({
-        tags: params,
-      }),
-      order_by: page?.reverse ? 'desc' : 'asc',
-      per_page: page?.limit,
-      page:
-        page?.limit && page?.offset
-          ? Math.ceil(page.offset / page.limit)
-          : undefined,
-    });
-
-    if (decodeRaw) {
-      res.txs.forEach((tx, i) => {
-        const txRaw = decodeTxRaw(tx.tx);
-        tx.result.events.forEach((event) => {
-          event.attributes.forEach((attr) => {
-            const key = convertStr(attr.key);
-            const value = convertStr(attr.value);
-            Object.assign(attr, { key, value });
-          });
-        });
-
-        // txRaw.body.messages = txRaw.body.messages.map(decodeProto);
-        // @ts-ignore
-        tx.txRaw = txRaw;
+    try {
+      const res = await this.tmClient.txSearch({
+        query: buildQuery({
+          tags: params,
+        }),
+        order_by: page?.reverse ? 'desc' : 'asc',
+        per_page: page?.limit,
+        page:
+          page?.limit && page?.offset
+            ? Math.ceil(page.offset / page.limit)
+            : undefined,
       });
-    }
 
-    // @ts-ignore
-    return res;
+      if (decodeRaw) {
+        res.txs.forEach((tx, i) => {
+          const txRaw = decodeTxRaw(tx.tx);
+          tx.result.events.forEach((event) => {
+            event.attributes.forEach((attr) => {
+              const key = convertStr(attr.key);
+              const value = convertStr(attr.value);
+              Object.assign(attr, { key, value });
+            });
+          });
+
+          // txRaw.body.messages = txRaw.body.messages.map(decodeProto);
+          // @ts-ignore
+          tx.txRaw = txRaw;
+        });
+      }
+
+      // @ts-ignore
+      return res;
+    } catch (error) {
+      return {
+        txs: [],
+        totalCount: 0,
+      };
+    }
   }
 
   async getTxsAt(height: string | number) {
