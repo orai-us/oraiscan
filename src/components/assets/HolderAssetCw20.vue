@@ -47,5 +47,5 @@ function handleSearch(keyword: string) {
 <template>
   <HolderAssetComponent :owners="holders" :chain="chain" :loading="loading" :totalHolder="totalHolder"
     :currentPrice="currentPrice" :limit="pagination.limit" :handlePagination="handlePagination"
-    :searchQuery="searchQuery" @search="handleSearch" />
+    :searchQuery="searchQuery" @search="handleSearch" :decimals="decimals" />
 </template>

@@ -1,13 +1,19 @@
 <script lang="ts" setup>
 import { formatNumber } from "@/utils";
 import Pagination from "../pagination/Pagination.vue";
+import { toRaw, watchEffect } from "vue";
 
-const props = defineProps(["owners", "totalHolder", "loading", "chain", "currentPrice", "limit", 'handlePagination', 'searchQuery']);
+const props = defineProps(["owners", "totalHolder", "loading", "chain", "currentPrice", "limit", 'handlePagination', 'searchQuery', 'decimals']);
 const emit = defineEmits(['search']);
 
 const handleSearch = (event: any) => {
   emit('search', event?.target?.value);
 };
+
+watchEffect(()=>{
+  console.log({ data: toRaw(props.decimals) });
+})
+
 </script>
 <template>
   <div>
@@ -35,14 +41,13 @@ const handleSearch = (event: any) => {
               </RouterLink>
             </td>
             <td class="text-right">
-              <span v-if="owner.amount / Math.pow(10, 6) >= 0.00001">{{ (owner.amount /
-                Math.pow(10,
-                  6)).toLocaleString("en-US", {}) }}</span>
+              <span v-if="owner.amount / Math.pow(10, decimals) >= 0.00001">{{ (owner.amount /
+                Math.pow(10, decimals)).toLocaleString("en-US", {}) }}</span>
               <span v-else>{{ `< 0.00001` }} </span>
             </td>
             <td class="text-right">
-              <span v-if="owner.amount / Math.pow(10, 6) * currentPrice > 0.00001">$ {{
-                formatNumber(owner.amount / Math.pow(10, 6) * currentPrice) }}</span>
+              <span v-if="owner.amount / Math.pow(10, decimals) * currentPrice > 0.00001">$ {{
+                formatNumber(owner.amount / Math.pow(10, decimals) * currentPrice) }}</span>
               <span v-else>{{ `< 0.00001` }} </span>
             </td>
           </tr>
