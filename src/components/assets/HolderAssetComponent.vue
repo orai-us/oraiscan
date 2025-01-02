@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { formatNumber } from "@/utils";
 import Pagination from "../pagination/Pagination.vue";
-import { toRaw, watchEffect } from "vue";
 
 const props = defineProps(["owners", "totalHolder", "loading", "chain", "currentPrice", "limit", 'handlePagination', 'searchQuery', 'decimals']);
 const emit = defineEmits(['search']);
@@ -9,10 +8,6 @@ const emit = defineEmits(['search']);
 const handleSearch = (event: any) => {
   emit('search', event?.target?.value);
 };
-
-watchEffect(()=>{
-  console.log({ data: toRaw(props.decimals) });
-})
 
 </script>
 <template>
