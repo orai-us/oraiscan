@@ -125,7 +125,20 @@ export const getListAsset = async (chain: string) => {
           item.base !== 'cw20:orai1nd4r053e3kgedgld2ymen8l9yrw8xpjyaal7j5' &&
           item.base !== 'cw20:orai1gzvndtzceqwfymu2kqhta2jn6gmzxvzqwdgvjw'
       )
-      .map((item: any) => ({ ...item, verify: true }));
+      .map((item: any) => {
+        if (item.base === 'ibc/49D820DFDE9F885D7081725A58202ABA2F465CAEE4AFBC683DFB79A8E013E83E')
+          item.denom_units = [
+            {
+              "denom": "ibc/49D820DFDE9F885D7081725A58202ABA2F465CAEE4AFBC683DFB79A8E013E83E",
+              "exponent": 0
+            },
+            {
+              denom: 'inj',
+              exponent: 18,
+            },
+          ];
+        return { ...item, verify: true };
+      });
     if (chain.toLowerCase() === 'oraichain') return [...assets, ...NEW_ASSETS];
     return assets;
   } catch (error) {
