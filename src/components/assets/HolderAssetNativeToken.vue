@@ -68,5 +68,5 @@ const handleSearch=(keyword: string)=>{
 </script>
 <template>
   <HolderAssetComponent :owners="owners" :chain="chain" :loading="loading" :totalHolder="totalHolder"
-    :currentPrice="currentPrice" :limit="pagination.limit" :handlePagination="handlePagination" :searchQuery="searchQuery" @search="handleSearch" />
+    :currentPrice="currentPrice" :limit="pagination.limit" :handlePagination="handlePagination" :searchQuery="searchQuery" @search="handleSearch" :decimals="decimals" />
 </template>
