@@ -281,7 +281,7 @@ function mapAmounts(tx: ExtraTxResponse) {
           .reduce((a: number, msg: any) => a + Number(msg.amount.amount), 0);
       }
       if (x.contract) {
-        return x.funds[0].amount;
+        return x.funds[0]?.amount;
       }
       // default
       return x?.amount?.amount;
