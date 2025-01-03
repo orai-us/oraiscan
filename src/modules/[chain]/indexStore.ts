@@ -231,6 +231,8 @@ export const useIndexModule = defineStore('module-index', {
               amount: String(parseInt(t.amount)),
               denom: t.denom,
             }));
+        }).catch((error)=>{
+          this.communityPool = []
         });
       // const gov = useGovStore();
       // gov.fetchProposals('2').then((x) => {
