@@ -246,12 +246,12 @@ export const useIndexModule = defineStore('module-index', {
       if (firstAsset && firstAsset.coingecko_id) {
         this.coingecko.getCoinInfo(firstAsset.coingecko_id).then((x) => {
           this.coinInfo = x;
-        });
+        }).catch((error)=> console.log({error}))
         this.coingecko
           .getMarketChart(this.days, firstAsset.coingecko_id)
           .then((x) => {
             this.marketData = x;
-          });
+          }).catch((error)=> console.log({error}));
       }
     },
     selectTicker(i: number) {
