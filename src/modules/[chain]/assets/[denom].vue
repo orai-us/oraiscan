@@ -79,10 +79,10 @@ watch([() => props.denom, () => assets.value], async () => {
       </div>
       <div v-show="sector === SECTOR.HOLDERS">
         <div v-if="denom.includes('cw20:')">
-          <HolderAssetCw20 :denom="denom" :chain="chain" :currentPrice="asset.current_price" />
+          <HolderAssetCw20 :denom="denom" :chain="chain" :currentPrice="asset?.current_price" />
         </div>
         <div v-else>
-          <HolderAssetNativeToken :denom="denom" :chain="chain" :currentPrice="asset.current_price" />
+          <HolderAssetNativeToken :denom="denom" :chain="chain" :currentPrice="asset?.current_price" />
         </div>
       </div>
     </div>

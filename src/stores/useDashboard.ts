@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { get } from '../libs/http';
 import type { Chain, Asset } from '@ping-pub/chain-registry-client/dist/types';
 import { useBlockchain } from './useBlockchain';
+import { getListAsset } from '@/service/assetsService';
 
 export enum EndpointType {
   rpc,
@@ -138,21 +139,22 @@ function apiConverter(api: any[]) {
   });
 }
 
-export function fromLocal(lc: LocalConfig): ChainConfig {
+export async function fromLocal(lc: LocalConfig): Promise<ChainConfig> {
   const conf = {} as ChainConfig;
-  conf.assets = lc.assets.map((x) => ({
-    name: x.base,
-    base: x.base,
-    display: x.symbol,
-    symbol: x.symbol,
-    logo_URIs: { svg: x.logo },
-    coingecko_id: x.coingecko_id,
-    exponent: x.exponent,
-    denom_units: [
-      { denom: x.base, exponent: 0 },
-      { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
-    ],
-  }));
+  // conf.assets = lc.assets.map((x) => ({
+  //   name: x.base,
+  //   base: x.base,
+  //   display: x.symbol,
+  //   symbol: x.symbol,
+  //   logo_URIs: { svg: x.logo },
+  //   coingecko_id: x.coingecko_id,
+  //   exponent: x.exponent,
+  //   denom_units: [
+  //     { denom: x.base, exponent: 0 },
+  //     { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
+  //   ],
+  // }));
+  conf.assets = await getListAsset(lc.chain_name);
   conf.cosmwasmEnabled = lc.cosmwasm_enabled ?? false;
   conf.versions = {
     cosmosSdk: lc.sdk_version,
@@ -339,9 +341,17 @@ export const useDashboard = defineStore('dashboard', {
         this.networkType === NetworkType.Mainnet
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
           : import.meta.glob('../../chains/testnet/*.json', { eager: true });
-      Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
-        this.chains[x.chain_name] = fromLocal(x);
-      });
+
+      const valuesSource = Object.values<LocalConfig>(source);
+      const infoChainPromises = [];
+      for (let item of valuesSource) {
+        infoChainPromises.push(fromLocal(item));
+      }
+
+      const infoChains = await Promise.all(infoChainPromises);
+      for (let item of infoChains) {
+        this.chains[item.chainName] = item;
+      }
 
       this.setupDefault();
       this.status = LoadingStatus.Loaded;
@@ -352,9 +362,18 @@ export const useDashboard = defineStore('dashboard', {
         network === NetworkType.Mainnet
           ? import.meta.glob('../../chains/mainnet/*.json', { eager: true })
           : import.meta.glob('../../chains/testnet/*.json', { eager: true });
-      Object.values<LocalConfig>(source).forEach((x: LocalConfig) => {
-        config[x.chain_name] = fromLocal(x);
-      });
+
+      const valuesSource = Object.values<LocalConfig>(source);
+      const infoChainPromises = [];
+      for (let item of valuesSource) {
+        infoChainPromises.push(fromLocal(item));
+      }
+
+      const infoChains = await Promise.all(infoChainPromises);
+      for (let item of infoChains) {
+        config[item.chainName] = item;
+      }
+
       return config;
     },
     setupDefault() {

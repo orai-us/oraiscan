@@ -8,6 +8,7 @@ import { getCw20Balances, getListAsset, getPriceByIds } from '@/service/assetsSe
 import numeral from 'numeral';
 import ChainRegistryClient from '@ping-pub/chain-registry-client';
 import axios from 'axios';
+import { shortenDenom } from '@/utils';
 
 const props = defineProps(['balances', 'delegations', 'rewards', 'unbondingTotal', 'address', 'chain']);
 
@@ -152,7 +153,6 @@ watch([balancesAssets, delegatesAssets, rewardsTotalAssets, unbondingAssets, sup
   const assets = [...balancesAssets.value, ...delegatesAssets.value, ...rewardsTotalAssets.value, ...unbondingAssets.value];
   const ids = assets.map(item => item?.id);
 
-  console.log({ ids })
   const result: any = {};
   if (ids?.length > 0) {
     const res = await getPriceByIds({ ids: ids.join(",") });
@@ -232,7 +232,7 @@ function formatValue(amount: number, fmt = '0,0.[0]') {
             </div>
             <div class="flex-1">
               <div class="text-sm font-semibold">
-                {{ balanceItem?.amountDisplay }} {{ balanceItem?.denom?.toUpperCase() }}
+                {{ balanceItem?.amountDisplay }} {{ shortenDenom(balanceItem?.denom)?.toUpperCase() }}
               </div>
               <div class="text-xs">
                 {{ formatValue((priceBySymbol[balanceItem?.denom] * balanceItem?.amount) / totalValue * 100) }}%
@@ -250,7 +250,7 @@ function formatValue(amount: number, fmt = '0,0.[0]') {
             </div>
             <div class="flex-1">
               <div class="text-sm font-semibold">
-                {{ delegationItem?.amountDisplay }} {{ delegationItem?.denom?.toUpperCase() }}
+                {{ delegationItem?.amountDisplay }} {{ shortenDenom(delegationItem?.denom)?.toUpperCase() }}
               </div>
               <div class="text-xs">
                 {{ formatValue((priceBySymbol[delegationItem?.denom] * delegationItem?.amount) / totalValue * 100) }}%
@@ -268,7 +268,7 @@ function formatValue(amount: number, fmt = '0,0.[0]') {
             </div>
             <div class="flex-1">
               <div class="text-sm font-semibold">
-                {{ rewardItem?.amountDisplay }} {{ rewardItem?.denom?.toUpperCase() }}
+                {{ rewardItem?.amountDisplay }} {{ shortenDenom(rewardItem?.denom)?.toUpperCase() }}
               </div>
               <div class="text-xs">
                 {{ formatValue((priceBySymbol[rewardItem?.denom] * rewardItem?.amount) / totalValue * 100) }}%
@@ -286,7 +286,7 @@ function formatValue(amount: number, fmt = '0,0.[0]') {
             </div>
             <div class="flex-1">
               <div class="text-sm font-semibold">
-                {{ unbondingAssets[0]?.amount }} {{ unbondingAssets[0]?.denom?.toUpperCase() }}
+                {{ unbondingAssets[0]?.amount }} {{ shortenDenom(unbondingAssets[0]?.denom)?.toUpperCase() }}
               </div>
               <div class="text-xs">
                 {{ formatValue((priceBySymbol[unbondingAssets[0]?.denom] * unbondingAssets[0]?.amount) / totalValue *

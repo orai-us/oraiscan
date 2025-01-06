@@ -30,19 +30,19 @@ const copyWebsite = async (url: string) => {
   <div class="m-4 md:m-6 border border-base-400 bg-base-100 rounded-2xl p-5 flex gap-2 flex-col">
     <div class="flex flex-row items-center gap-3">
       <img :src="asset.logo_URIs?.png || asset.logo_URIs?.svg" alt="img"
-        v-if="asset.logo_URIs?.png || asset.logo_URIs?.svg"
+        v-if="asset?.logo_URIs?.png || asset?.logo_URIs?.svg"
         class="w-10 h-10 rounded-full border border-blue-100 bg-white" />
       <div v-else class="w-10 h-10 rounded-full border border-blue-100 bg-white"></div>
       <div>
         <div>
-          <span class="text-white text-xl font-bold" v-if="asset.symbol">{{
+          <span class="text-white text-xl font-bold" v-if="asset?.symbol">{{
             shortenDenom(asset.symbol?.toUpperCase())
             }}</span>
           <span v-else>-</span>
         </div>
         <div class="flex flex-row gap-2">
           <div>
-            <span v-if="asset.current_price" class="text-white">
+            <span v-if="asset?.current_price" class="text-white">
               $ {{ formatNumber(asset.current_price) }}
             </span>
             <span v-else>-</span>
@@ -82,19 +82,19 @@ const copyWebsite = async (url: string) => {
       <div class="flex flex-row">
         <div class="w-[200px]">Description</div>
         <div class="w-[80%]">
-          <span class="text-white">{{ asset.description }}</span>
+          <span class="text-white">{{ asset?.description }}</span>
         </div>
       </div>
       <div class="flex flex-row">
         <div class="w-[200px]">Denom</div>
         <div class="flex flex-row items-center">
-          <span class="text-white">{{ asset.base }}</span>
-          <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer" v-show="asset.base" @click="copyWebsite(asset.base || '')" />
+          <span class="text-white">{{ asset?.base }}</span>
+          <Icon icon="mdi:content-copy" class="ml-2 cursor-pointer" v-show="asset?.base" @click="copyWebsite(asset.base || '')" />
         </div>
       </div>
       <div class="flex flex-row">
         <div class="w-[200px]">Decimals</div>
-        <span class="text-white">{{ asset.denom_units?.slice(-1)[0].exponent }}</span>
+        <span class="text-white">{{ asset?.denom_units?.slice(-1)[0]?.exponent }}</span>
       </div>
     </div>
 
