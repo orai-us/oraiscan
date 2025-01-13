@@ -20,22 +20,31 @@ const loading = ref(true);
 
 watchEffect(() => {
   async function fetchTxs() {
-    loading.value = true;
-    const res = await getTxsAccount(props.address, { ...pagination, count: true });
-    if (res) {
-      const { data, options } = res;
-      totalCount.value = options.totalCount;
-      transactions.value = data;
+    try {
+      loading.value = true;
+      const res = await getTxsAccount(props.address, { ...pagination, count: true });
+      if (res) {
+        const { data, options } = res;
+        totalCount.value = options.totalCount;
+        transactions.value = data;
+      }
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      loading.value = false;
     }
-    loading.value = false;
   }
   fetchTxs();
 })
 
 async function handlePagination(page: number) {
-  const res = await getTxsAccount(props.address, { ...pagination, page, count: false });
-  if (res) {
-    transactions.value = res.data;
+  try {
+    const res = await getTxsAccount(props.address, { ...pagination, page, count: false });
+    if (res) {
+      transactions.value = res.data;
+    }
+  } catch (error) {
+    console.log({ error });
   }
 }
 
