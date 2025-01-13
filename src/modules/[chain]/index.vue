@@ -306,7 +306,7 @@ const amount = computed({
         <div class="max-h-[250px] overflow-auto p-4 text-sm mb-4">
           <MdEditor :model-value="coinInfo.description?.en" previewOnly></MdEditor>
         </div>
-        <div v-if="!coinInfo.description?.en && coinInfo.categories.length === 0" class="text-center">
+        <div v-if="!coinInfo.description?.en && coinInfo.categories?.length === 0" class="text-center">
           No informations
         </div>
       </div>
@@ -411,7 +411,7 @@ const amount = computed({
         </div>
       </div>
 
-      <div v-if="walletStore.delegations.length > 0" class="px-4 pb-4 overflow-auto">
+      <div v-if="walletStore.delegations?.length > 0" class="px-4 pb-4 overflow-auto">
         <table class="table table-compact w-full table-zebra">
           <thead>
             <tr>
