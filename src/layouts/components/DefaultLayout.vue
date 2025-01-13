@@ -313,7 +313,7 @@ onClickOutside(refSearchInput, event => clickOutsideSearch.value=false);
             v-model="searchQuery" placeholder="Search by Height, Address, Contracts, and TxHash"
             v-on:keyup.enter="confirm" />
           <div class="absolute mt-2 text-sm bg-base flex flex-col w-full rounded-md shadow-sm shadow-gray-500"
-            v-show="searchQuery.length < 49 && searchQuery.length > 37 && clickOutsideSearch">
+            v-show="searchQuery.length > 37 && clickOutsideSearch">
             <div class="hover:cursor-pointer hover:bg-[#47474B] w-full px-4 py-2 rounded-t-md"
               @click="handleSearchAccountContract('ACCOUNT', searchQuery)"><span class="flex gap-2">Search
                 For <p class="text-white font-bold">Account</p></span></div>
