@@ -83,7 +83,7 @@ const txs = ref({} as ExtraTxSearchResponse);
 
 blockchain.rpc.getTxsBySender(addresses.value.account).then((x) => {
   txs.value = x;
-});
+}).catch((error) => console.log({ error }));
 
 const consensusPubkey = computed(() => {
   return v.value.consensusPubkey
