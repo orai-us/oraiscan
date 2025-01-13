@@ -101,22 +101,22 @@ export const useWalletStore = defineStore('walletStore', {
       if (!this.currentAddress) return;
       this.blockchain.rpc.getBankBalances(this.currentAddress).then((x) => {
         this.balances = x;
-      });
+      }).catch((error) => console.log({ error }));
       this.blockchain.rpc
         .getStakingDelegations(this.currentAddress)
         .then((x) => {
           this.delegations = x.delegationResponses;
-        });
+        }).catch((error) => console.log({ error }));;
       this.blockchain.rpc
         .getStakingDelegatorUnbonding(this.currentAddress)
         .then((x) => {
           this.unbonding = x.unbondingResponses;
-        });
+        }).catch((error) => console.log({ error }));;
       this.blockchain.rpc
         .getDistributionDelegatorRewards(this.currentAddress)
         .then((x) => {
           this.rewards = x;
-        });
+        }).catch((error) => console.log({ error }));;
     },
     myBalance() {
       return this.blockchain.rpc.getBankBalances(this.currentAddress);
