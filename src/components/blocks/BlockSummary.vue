@@ -13,8 +13,8 @@ const blockSummary = computed(()=>{
 })
 
 watch(blockSummary,async () => {
-  const heightNew = blockSummary.value[0]?.stats;
-  if (heightNew) {
+  const heightNew = Number(blockSummary.value[0]?.stats);
+  if (heightNew > 5) {
     const heightOld = Number(heightNew) - 5;
     const [blockOld, blockNew] = await Promise.all([
       store.fetchBlock(heightOld),
